@@ -4,7 +4,7 @@ import * as dotenv from 'dotenv';
 
 dotenv.config(); // load environmental values from .env files
 
-test.describe('Login Page Tests', async () => {
+test.describe('Add User Page Tests', async () => {
   let page: Page;
   let poManager: POManager;
 
@@ -19,7 +19,7 @@ test.describe('Login Page Tests', async () => {
     await page.close();
   });
 
-  test('Should have correct texts and links @regression @frontend @addUser', async() => {
+  test('Should have correct texts and links @regression @web @addUser', async() => {
     await expect(poManager.addUserPage.headerTitleWebElement).toBeVisible();
     await expect(poManager.addUserPage.subTitleWebElement).toBeVisible();
     // Similar assertions can take place for the rest of the texts of this page for exhaustive testing,
@@ -27,7 +27,7 @@ test.describe('Login Page Tests', async () => {
     // Also, we can add an assertion about the displayed image.
   });
 
-  test('Add user with no input should throw validation @smoke @frontend @addUser', async() => {
+  test('Add user with no input should throw validation @smoke @web @addUser', async() => {
     await poManager.addUserPage.submitButtonWebElement.click();
     await expect(poManager.addUserPage.validationErrorWebElement).toContainText('User validation failed');
     // Similar tests can be written here for exhaustive testing with @regression tag:
@@ -39,7 +39,7 @@ test.describe('Login Page Tests', async () => {
     // case where I leave all of them empty.
   });
 
-  test('Cancelling sign up should redirect to login page with user not created @smoke @frontend @addUser', async() => {
+  test('Cancelling sign up should redirect to login page with user not created @smoke @web @addUser', async() => {
     // fill form and click 'Cancel'
     await poManager.addUserPage.firstNameInputWebElement.fill('cancelUserFirstName');
     await poManager.addUserPage.lastNameInputWebElement.fill('cancelUserLastName');
