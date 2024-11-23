@@ -47,18 +47,21 @@ test.describe('Add User Web Page Tests', async () => {
   });
 
   test('Sign up cancel _should_ no created user @smoke @web @addUser', async() => {
-    // fill form and click 'Cancel'
-    await poManager.addUserPage.firstNameInputWebElement.fill('cancelUserFirstName');
-    await poManager.addUserPage.lastNameInputWebElement.fill('cancelUserLastName');
-    await poManager.addUserPage.emailInputWebElement.fill('cancelUserEmail@gmail.com');
-    await poManager.addUserPage.passwordInputWebElement.fill('cancelPassword');
+    const userDTO = UserDTO.getRandomDefaultUser();
+    // Fill form and click 'Cancel'
+    await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
+    await poManager.addUserPage.lastNameInputWebElement.fill(userDTO.lastName);
+    await poManager.addUserPage.emailInputWebElement.fill(userDTO.email);
+    await poManager.addUserPage.passwordInputWebElement.fill(userDTO.password);
     await poManager.addUserPage.cancelButtonWebElement.click();
-    // we are redirected to login page
+    // We are redirected to login page
     expect(page.url()).toBe(process.env.CONTACT_LIST_LOGIN_URL as string);
-    // TODO: assert user has not been created through an API call 
+    // Assert user has not been created through an API call 
+    const usersService = new UsersService(clientManager.usersClient);
+    await expect(usersService.loginUser(userDTO.email, userDTO.password)).rejects.toThrow("Failed to login user with status: 401");
   });
 
-  test.only('Sign up user _should_ create user @smoke @web @addUser', async() => {
+  test('Sign up user _should_ create user @smoke @web @addUser', async() => {
     const userDTO = UserDTO.getRandomDefaultUser();
     await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
     await poManager.addUserPage.lastNameInputWebElement.fill(userDTO.lastName);
