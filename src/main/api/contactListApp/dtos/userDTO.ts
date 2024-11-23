@@ -13,14 +13,13 @@ export class UserDTO {
         this.password = password;
     };
 
-    static getDefault(): UserDTO {
+    static getRandomDefaultUser(): UserDTO {
+        const randomNum = Math.floor(Math.random() * 1000000); // Random number between 0 and 999999
         return new UserDTO(
             'TesterFirstName', 
             'TesterLastName', 
-            'testerDefault123@example.com', 
+            `testerdefault${randomNum}@example.com`, 
             'testerDefaultPassword');
-    }
-
-
+    };
 
 }
