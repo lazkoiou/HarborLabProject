@@ -3,10 +3,11 @@ import { POManager } from '../../main/pageObjects/poManager';
 import * as dotenv from 'dotenv';
 import { UserDTO } from '../../main/api/contactListApp/dtos/userDTO';
 import { ClientManager } from '../../main/api/contactListApp/clients/clientManager';
+import { UsersService } from '../../main/api/contactListApp/services/usersService';
 
 dotenv.config(); // load environmental values from .env files
 
-test.describe('Add User Page Tests', async () => {
+test.describe('Add User Web Page Tests', async () => {
   let page: Page;
   let poManager: POManager;
   let clientManager: ClientManager;
@@ -25,7 +26,7 @@ test.describe('Add User Page Tests', async () => {
     await page.close();
   });
 
-  test('Should have correct texts and links @regression @web @addUser', async() => {
+  test('Page _should_ correct texts, links @regression @web @addUser', async() => {
     await expect(poManager.addUserPage.headerTitleWebElement).toBeVisible();
     await expect(poManager.addUserPage.subTitleWebElement).toBeVisible();
     // Similar assertions can take place for the rest of the texts of this page for exhaustive testing,
@@ -33,7 +34,7 @@ test.describe('Add User Page Tests', async () => {
     // Also, we can add an assertion about the displayed image.
   });
 
-  test('Add user with no input should throw validation @smoke @web @addUser', async() => {
+  test('No input add user _should_ validation error @smoke @web @addUser', async() => {
     await poManager.addUserPage.submitButtonWebElement.click();
     await expect(poManager.addUserPage.validationErrorWebElement).toContainText('User validation failed');
     // Similar tests can be written here for exhaustive testing with @regression tag:
@@ -45,7 +46,7 @@ test.describe('Add User Page Tests', async () => {
     // case where I leave all of them empty.
   });
 
-  test('Cancelling sign up should redirect to login page with user not created @smoke @web @addUser', async() => {
+  test('Sign up cancel _should_ no created user @smoke @web @addUser', async() => {
     // fill form and click 'Cancel'
     await poManager.addUserPage.firstNameInputWebElement.fill('cancelUserFirstName');
     await poManager.addUserPage.lastNameInputWebElement.fill('cancelUserLastName');
@@ -57,7 +58,7 @@ test.describe('Add User Page Tests', async () => {
     // TODO: assert user has not been created through an API call 
   });
 
-  test('Sign up form should successfully create a user @smoke @web @addUser', async() => {
+  test.only('Sign up user _should_ create user @smoke @web @addUser', async() => {
     const userDTO = UserDTO.getRandomDefaultUser();
     await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
     await poManager.addUserPage.lastNameInputWebElement.fill(userDTO.lastName);
@@ -66,14 +67,10 @@ test.describe('Add User Page Tests', async () => {
     await poManager.addUserPage.submitButtonWebElement.click();
     await expect(poManager.contactListPage.pageTitleWebElement).toBeVisible();
 
-    // Login also with the API to get the bearer token and use it to delete the user for cleanup
-    let response = await clientManager.usersClient.postLoginUser(userDTO.email, userDTO.password);    
-    expect(response.ok()).toBeTruthy();
-    let responseData = await response.json();
-    const bearerToken = responseData.token;
-    response = await clientManager.usersClient.deleteUser(bearerToken);
-    expect(response.ok()).toBeTruthy();
-    console.log('User ' + userDTO.email + ' has been deleted.')
+    // Cleanup: login to get bearer token and delete user
+    const usersService = new UsersService(clientManager.usersClient);
+    const bearerToken = await usersService.loginUser(userDTO.email, userDTO.password);
+    await usersService.deleteUser(bearerToken, userDTO);
   });
 
   // Additional notes:

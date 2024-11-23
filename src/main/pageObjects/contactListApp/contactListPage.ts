@@ -11,4 +11,8 @@ export class ContactListPage extends BasePage {
         return this.page.getByRole('heading', {name: 'Contact List'});
     }
 
+    get addNewContactButtonWebElement() : Locator {
+        return this.page.getByRole('button', {name: 'Add a New Contact'});
+    }
+
 };

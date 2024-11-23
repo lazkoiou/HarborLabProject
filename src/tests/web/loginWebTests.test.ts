@@ -3,10 +3,11 @@ import { POManager } from '../../main/pageObjects/poManager';
 import * as dotenv from 'dotenv';
 import { ClientManager } from '../../main/api/contactListApp/clients/clientManager';
 import { UserDTO } from '../../main/api/contactListApp/dtos/userDTO';
+import { UsersService } from '../../main/api/contactListApp/services/usersService';
 
 dotenv.config(); // load environmental values from .env files
 
-test.describe('Login Page Tests', async () => {
+test.describe('Login Page Web Tests', async () => {
   let page: Page;
   let poManager: POManager;
   let clientManager: ClientManager;
@@ -24,7 +25,7 @@ test.describe('Login Page Tests', async () => {
     await page.close();
   });
 
-  test('Should have correct texts and links @regression @web @login', async() => {
+  test('Page _should_ correct texts, links @regression @web @login', async() => {
     await expect(poManager.loginPage.headerTitleWebElement).toBeVisible();
     await expect(poManager.loginPage.welcomeText1WebElement).toBeVisible();
     await expect(poManager.loginPage.welcomeText2WebElement).toBeVisible();
@@ -34,19 +35,19 @@ test.describe('Login Page Tests', async () => {
     // Also, we can add an assertion about the displayed image.
   });
 
-  test('Login with non existing user should throw validation @smoke @web @login', async() => {
+  test('Non existing user login _should_ validation error @smoke @web @login', async() => {
     await poManager.loginPage.usernameInputWebElement.fill('nonexistentuser@gmail.com');
     await poManager.loginPage.passwordInputWebElement.fill('nonexistentpassword');
     await poManager.loginPage.submitButtonWebElement.click();
     await expect(poManager.loginPage.validationErrorWebElement).toHaveText('Incorrect username or password');
   });
 
-  test('Login with no user input should throw validation @smoke @web @login', async() => {
+  test('No user input login _should_ validation error @smoke @web @login', async() => {
     await poManager.loginPage.submitButtonWebElement.click();
     await expect(poManager.loginPage.validationErrorWebElement).toHaveText('Incorrect username or password');
   });
 
-  test('Clicking on sign up button should redirect to registration page @smoke @web @login', async() => {
+  test('Sign up button _should_ redirect to registration page @smoke @web @login', async() => {
     await poManager.loginPage.signUpButtonWebElement.click();
     expect(page.url()).toBe(process.env.CONTACT_LIST_ADD_USER_URL as string);
     await expect(poManager.addUserPage.headerTitleWebElement).toHaveText('Add User');
@@ -60,16 +61,12 @@ test.describe('Login Page Tests', async () => {
   //  - empty password field
   //  - very big input in username or password
 
-  test('Login with existing user should be successful and land on Contact List page @web @smoke @login', async() => {
+  test('Existing user login _should_ be successful @web @smoke @login', async() => {
     let bearerToken: string | null = null;
+    const usersService = new UsersService(clientManager.usersClient);
+    const userDTO = UserDTO.getRandomDefaultUser();
     try { // Preparation: Create user through the API for faster execution
-      const userDTO = UserDTO.getRandomDefaultUser();
-      const response = await clientManager.usersClient.postAddUser(userDTO);
-      expect(response.ok()).toBeTruthy();
-      console.log('User ' + userDTO.email + ' created.')
-      const responseData = await response.json();
-      bearerToken = responseData.token;
-      
+      bearerToken = await usersService.createUser(userDTO);
       // Actual test starts here
       await poManager.loginPage.usernameInputWebElement.fill(userDTO.firstName);
       await poManager.loginPage.passwordInputWebElement.fill(userDTO.lastName);
@@ -78,9 +75,7 @@ test.describe('Login Page Tests', async () => {
     }
     finally { // Cleanup: Delete previously created user
         if (bearerToken != null) {
-            const response = await clientManager.usersClient.deleteUser(bearerToken);
-            expect(response.ok()).toBeTruthy();
-            console.log('User deleted.');
+            await usersService.deleteUser(bearerToken, userDTO);
         }
     }
   });
