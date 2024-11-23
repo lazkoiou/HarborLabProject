@@ -1,6 +1,7 @@
 import { Page } from "playwright/test";
 import { LoginPage } from "./contactListApp/loginPage";
 import { AddUserPage } from "./contactListApp/addUserPage";
+import { ContactListPage } from "./contactListApp/contactListPage";
 
 /**
  * Class used to handle POMs
@@ -19,6 +20,10 @@ export class POManager {
 
     get addUserPage(): AddUserPage {
         return new AddUserPage(this.page);
+    }
+
+    get contactListPage(): ContactListPage {
+        return new ContactListPage(this.page);
     }
 
 }

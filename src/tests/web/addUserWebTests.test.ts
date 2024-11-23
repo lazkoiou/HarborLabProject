@@ -1,17 +1,23 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, request } from '@playwright/test';
 import { POManager } from '../../main/pageObjects/poManager';
 import * as dotenv from 'dotenv';
+import { UserDTO } from '../../main/api/contactListApp/dtos/userDTO';
+import { ClientManager } from '../../main/api/contactListApp/clients/clientManager';
 
 dotenv.config(); // load environmental values from .env files
 
 test.describe('Add User Page Tests', async () => {
   let page: Page;
   let poManager: POManager;
+  let clientManager: ClientManager;
 
   test.beforeEach(async ({ browser}) => {
     const context = await browser.newContext();
     page = await context.newPage();
     poManager = new POManager(page);
+    const requestContext = await request.newContext();
+    clientManager = new ClientManager(requestContext);
+    
     await page.goto(process.env.CONTACT_LIST_ADD_USER_URL as string);
   });
   
@@ -51,14 +57,29 @@ test.describe('Add User Page Tests', async () => {
     // TODO: assert user has not been created through an API call 
   });
 
-  // TODO Happy path where you sign up a user, verify user has been created with an API call, delete the user
+  test('Sign up form should successfully create a user @smoke @web @addUser', async() => {
+    const userDTO = UserDTO.getRandomDefaultUser();
+    await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
+    await poManager.addUserPage.lastNameInputWebElement.fill(userDTO.lastName);
+    await poManager.addUserPage.emailInputWebElement.fill(userDTO.email);
+    await poManager.addUserPage.passwordInputWebElement.fill(userDTO.password);
+    await poManager.addUserPage.submitButtonWebElement.click();
+    await expect(poManager.contactListPage.pageTitleWebElement).toBeVisible();
+
+    // Login also with the API to get the bearer token and use it to delete the user for cleanup
+    let response = await clientManager.usersClient.postLoginUser(userDTO.email, userDTO.password);    
+    expect(response.ok()).toBeTruthy();
+    let responseData = await response.json();
+    const bearerToken = responseData.token;
+    response = await clientManager.usersClient.deleteUser(bearerToken);
+    expect(response.ok()).toBeTruthy();
+    console.log('User ' + userDTO.email + ' has been deleted.')
+  });
 
   // Additional notes:
   // Input validation tests for all fields could be included - Not supported by the UI tested
   //  - e.g. email input without '@'
   //  - non latin characters
   //  - very big input in username or password
-
-  // TODO: Happy login path with created user though API
 
 });
