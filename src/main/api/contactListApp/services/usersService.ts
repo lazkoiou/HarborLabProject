@@ -19,7 +19,7 @@ export class UsersService {
      */
     async createUser(userDTO: UserDTO): Promise<string> {
         const response = await this.usersClient.postAddUser(userDTO);
-        if (!response.ok) {
+        if (!response.ok()) {
             throw new Error(`Failed to create user with status: ${response.status}`);
         }
         console.log('User created: ' + userDTO.email);
@@ -34,8 +34,8 @@ export class UsersService {
      */
     async deleteUser(bearerToken: string, userDTO: UserDTO) {
         const response = await this.usersClient.deleteUser(bearerToken);
-        if (!response.ok) {
-            throw new Error(`Failed to create user with status: ${response.status}`);
+        if (!response.ok()) {
+            throw new Error(`Failed to delete user with status: ${response.status}`);
         }
         console.log('User deleted: ' + userDTO.email);
     }
@@ -48,8 +48,8 @@ export class UsersService {
      */
     async loginUser(email: string, password: string): Promise<any> {
         const response = await this.usersClient.postLoginUser(email, password);
-        if (!response.ok) {
-            throw new Error(`Failed to create user with status: ${response.status}`);
+        if (!response.ok()) {
+            throw new Error(`Failed to login user with status: ${response.status()}`);
         }
         console.log('Login user: ' + email);
         const responseData = await response.json();
