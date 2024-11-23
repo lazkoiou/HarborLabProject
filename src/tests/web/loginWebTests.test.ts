@@ -1,17 +1,22 @@
-import { test, expect, Page } from '@playwright/test';
+import { test, expect, Page, request } from '@playwright/test';
 import { POManager } from '../../main/pageObjects/poManager';
 import * as dotenv from 'dotenv';
+import { ClientManager } from '../../main/api/contactListApp/clients/clientManager';
+import { UserDTO } from '../../main/api/contactListApp/dtos/userDTO';
 
 dotenv.config(); // load environmental values from .env files
 
 test.describe('Login Page Tests', async () => {
   let page: Page;
   let poManager: POManager;
+  let clientManager: ClientManager;
 
   test.beforeEach(async ({ browser}) => {
     const context = await browser.newContext();
     page = await context.newPage();
     poManager = new POManager(page);
+    const requestContext = await request.newContext();
+    clientManager = new ClientManager(requestContext);
     await page.goto(process.env.CONTACT_LIST_LOGIN_URL as string);
   });
   
@@ -55,6 +60,30 @@ test.describe('Login Page Tests', async () => {
   //  - empty password field
   //  - very big input in username or password
 
-  // TODO: Happy login path with created user though API
+  test('Login with existing user should be successful and land on Contact List page @web @smoke @login', async() => {
+    let bearerToken: string | null = null;
+    try { // Preparation: Create user through the API for faster execution
+      const userDTO = UserDTO.getRandomDefaultUser();
+      const response = await clientManager.usersClient.postAddUser(userDTO);
+      expect(response.ok()).toBeTruthy();
+      console.log('User ' + userDTO.email + ' created.')
+      const responseData = await response.json();
+      bearerToken = responseData.token;
+      
+      // Actual test starts here
+      await poManager.loginPage.usernameInputWebElement.fill(userDTO.firstName);
+      await poManager.loginPage.passwordInputWebElement.fill(userDTO.lastName);
+      await poManager.loginPage.submitButtonWebElement.click();
+      await expect(poManager.contactListPage.pageTitleWebElement).toBeVisible();
+    }
+    finally { // Cleanup: Delete previously created user
+        if (bearerToken != null) {
+            const response = await clientManager.usersClient.deleteUser(bearerToken);
+            expect(response.ok()).toBeTruthy();
+            console.log('User deleted.');
+        }
+    }
+  });
+  
 
 });
