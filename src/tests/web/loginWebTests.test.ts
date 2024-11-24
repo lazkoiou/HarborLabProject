@@ -25,7 +25,7 @@ test.describe('Login Page Web Tests', async () => {
     await page.close();
   });
 
-  test('Page _expect_ correct texts, links @regression @web @login', async() => {
+  test('Page _expect_ correct texts, links @web @regression @login', async() => {
     await expect(poManager.loginPage.headerTitleWebElement).toBeVisible();
     await expect(poManager.loginPage.welcomeText1WebElement).toBeVisible();
     await expect(poManager.loginPage.welcomeText2WebElement).toBeVisible();
@@ -35,19 +35,19 @@ test.describe('Login Page Web Tests', async () => {
     // Also, we can add an assertion about the displayed image.
   });
 
-  test('Non existing user login _expect_ validation error @smoke @web @login', async() => {
+  test('Non existing user login _expect_ validation error @web @smoke @login', async() => {
     await poManager.loginPage.usernameInputWebElement.fill('nonexistentuser@gmail.com');
     await poManager.loginPage.passwordInputWebElement.fill('nonexistentpassword');
     await poManager.loginPage.submitButtonWebElement.click();
     await expect(poManager.loginPage.validationErrorWebElement).toHaveText('Incorrect username or password');
   });
 
-  test('No user input login _expect_ validation error @smoke @web @login', async() => {
+  test('No user input login _expect_ validation error @web @smoke @login', async() => {
     await poManager.loginPage.submitButtonWebElement.click();
     await expect(poManager.loginPage.validationErrorWebElement).toHaveText('Incorrect username or password');
   });
 
-  test('Sign up button _expect_ redirect to registration page @smoke @web @login', async() => {
+  test('Sign up button _expect_ redirect to registration page @web @smoke @login', async() => {
     await poManager.loginPage.signUpButtonWebElement.click();
     expect(page.url()).toBe(process.env.CONTACT_LIST_ADD_USER_URL as string);
     await expect(poManager.addUserPage.headerTitleWebElement).toHaveText('Add User');

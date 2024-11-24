@@ -27,7 +27,7 @@ test.describe('Create Contact List Tests', async () => {
     await page.close();
   });
 
-  test('Create contact list _expect_ list created @smoke @web @contactFormList', async() => {
+  test('Create contact list _expect_ list created @web @smoke @contactFormList', async() => {
     let bearerToken: string | null = null;
     const usersService = new UsersService(clientManager.usersClient);
     const userDTO = UserDTO.getRandomDefaultUser();
