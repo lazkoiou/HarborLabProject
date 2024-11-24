@@ -15,4 +15,8 @@ export class ContactListPage extends BasePage {
         return this.page.getByRole('button', {name: 'Add a New Contact'});
     }
 
+    async getRowByNameWebElement(name: string): Promise<Locator> {
+        return this.page.getByRole('row', {name: new RegExp(name)});
+    }
+    
 };
