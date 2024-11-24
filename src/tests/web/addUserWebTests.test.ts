@@ -26,7 +26,7 @@ test.describe('Add User Web Page Tests', async () => {
     await page.close();
   });
 
-  test('Page _should_ correct texts, links @regression @web @addUser', async() => {
+  test('Page _expect_ correct texts, links @regression @web @addUser', async() => {
     await expect(poManager.addUserPage.headerTitleWebElement).toBeVisible();
     await expect(poManager.addUserPage.subTitleWebElement).toBeVisible();
     // Similar assertions can take place for the rest of the texts of this page for exhaustive testing,
@@ -34,7 +34,7 @@ test.describe('Add User Web Page Tests', async () => {
     // Also, we can add an assertion about the displayed image.
   });
 
-  test('No input add user _should_ validation error @smoke @web @addUser', async() => {
+  test('No input add user _expect_ validation error @smoke @web @addUser', async() => {
     await poManager.addUserPage.submitButtonWebElement.click();
     await expect(poManager.addUserPage.validationErrorWebElement).toContainText('User validation failed');
     // Similar tests can be written here for exhaustive testing with @regression tag:
@@ -46,7 +46,7 @@ test.describe('Add User Web Page Tests', async () => {
     // case where I leave all of them empty.
   });
 
-  test('Sign up cancel _should_ no created user @smoke @web @addUser', async() => {
+  test('Sign up cancel _expect_ no created user @smoke @web @addUser', async() => {
     const userDTO = UserDTO.getRandomDefaultUser();
     // Fill form and click 'Cancel'
     await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
@@ -61,7 +61,7 @@ test.describe('Add User Web Page Tests', async () => {
     await expect(usersService.loginUser(userDTO.email, userDTO.password)).rejects.toThrow("Failed to login user with status: 401");
   });
 
-  test('Sign up user _should_ create user @smoke @web @addUser', async() => {
+  test('Sign up user _expect_ create user @smoke @web @addUser', async() => {
     const userDTO = UserDTO.getRandomDefaultUser();
     await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
     await poManager.addUserPage.lastNameInputWebElement.fill(userDTO.lastName);
