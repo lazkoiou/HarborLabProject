@@ -61,12 +61,12 @@ npm run test:web:regression
 
 # Areas of improvement you have identified #
 
-Improvements that could take place:
-    1. Adding another report tool (e.g. allure-reports)
-    2. Attaching the report to the Jenkins job
-    3. Adding more smoke and regression tests (both for api and web)
-    4. Add a different logger instead of console.log()
-    5. Implement handlers that keep track of created users and deletes them at the end of
-        the tests, instead of using try-catch
-    6. Further separation of tests to @critical, which would run at the GitHub actions, because
-        running all the smoke tests, will be very time consuming after a point.
+###Improvements that could take place:
+- Adding another report tool (e.g. allure-reports)
+- Attaching the report to the Jenkins job
+- Adding more smoke and regression tests (both for api and web)
+- Add a different logger instead of console.log()
+- Implement handlers that keep track of created users and deletes them at the end of
+    the tests, instead of using try-catch
+- Further separation of tests to @critical, which would run at the GitHub actions, because
+    running all the smoke tests, will be very time consuming after a point
