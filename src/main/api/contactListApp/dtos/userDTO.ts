@@ -1,4 +1,7 @@
 
+/**
+ * DTO containing the user information
+ */
 export class UserDTO {
     
     firstName: string;

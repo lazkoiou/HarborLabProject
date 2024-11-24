@@ -1,7 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../basePage";
 
-
+/**
+ * POM for the Login page where a user can login
+ */
 export class LoginPage extends BasePage{
 
     constructor(page: Page) {

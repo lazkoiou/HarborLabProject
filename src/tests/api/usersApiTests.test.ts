@@ -2,6 +2,7 @@ import {test, expect, request} from "@playwright/test"
 import { UserDTO } from "../../main/api/contactListApp/dtos/userDTO";
 import { ClientManager } from "../../main/api/contactListApp/clients/clientManager";
 import { fail } from "assert";
+import { UsersService } from "../../main/api/contactListApp/services/usersService";
 
 test.describe(('Users Api tests'), () => {
 
@@ -14,13 +15,16 @@ test.describe(('Users Api tests'), () => {
 
     test('POST add user with correct fields should create the user @api @smoke @users', async() => {
         let bearerToken: string | null = null;
+        const userDTO = UserDTO.getRandomDefaultUser();
+        const usersService = new UsersService(clientManager.usersClient);
         try { // Create user
-            const userDTO = UserDTO.getRandomDefaultUser();
-            const response = await clientManager.usersClient.postAddUser(userDTO);
-            expect(response.ok()).toBeTruthy();
-            console.log('User ' + userDTO.email + ' created.')
-            const responseData = await response.json();
+            const responseData = await usersService.createUser(userDTO);
             bearerToken = responseData.token;
+            // const response = await clientManager.usersClient.postAddUser(userDTO);
+            // expect(response.ok()).toBeTruthy();
+            // console.log('User ' + userDTO.email + ' created.')
+            // const responseData = await response.json();
+            // bearerToken = responseData.token;
             expect(responseData.user.firstName).toBe(userDTO.firstName);
             expect(responseData.user.lastName).toBe(userDTO.lastName);
             expect(responseData.user.email).toBe(userDTO.email);
@@ -29,9 +33,7 @@ test.describe(('Users Api tests'), () => {
         finally {
             if (bearerToken != null) {
                 // Delete the previously created user for clean up
-                const response = await clientManager.usersClient.deleteUser(bearerToken);
-                expect(response.ok()).toBeTruthy();
-                console.log('User deleted.');
+                await usersService.deleteUser(bearerToken, userDTO);
             }
         }
     });
@@ -43,7 +45,7 @@ test.describe(('Users Api tests'), () => {
         expect(response.ok()).toBeFalsy();
         expect(response.status()).toBe(400);
     });
-    // Similar to this, we can write tests with any of the other fields empty and assert the 400 Bad Request
+    // Additional tests: we can write tests with any of the other fields empty and assert the 400 Bad Request
     //  - lastName = ""
     //  - email = ""
     //  - password = ""

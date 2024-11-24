@@ -1,6 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../basePage";
 
+/**
+ * POM for the Contact List page which contains all created contact forms
+ */
 export class ContactListPage extends BasePage {
 
     constructor(page: Page) {

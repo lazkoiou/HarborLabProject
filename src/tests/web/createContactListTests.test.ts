@@ -27,12 +27,13 @@ test.describe('Create Contact List Tests', async () => {
     await page.close();
   });
 
-  test.only('Create contact list _expect_ list created @smoke @web @contactFormList', async() => {
+  test('Create contact list _expect_ list created @smoke @web @contactFormList', async() => {
     let bearerToken: string | null = null;
     const usersService = new UsersService(clientManager.usersClient);
     const userDTO = UserDTO.getRandomDefaultUser();
     try { // Preparation: Create user through the API for faster execution
-        bearerToken = await usersService.createUser(userDTO);
+        const responseData = await usersService.createUser(userDTO);
+        bearerToken = responseData.token;
         await poManager.loginPage.usernameInputWebElement.fill(userDTO.email);
         await poManager.loginPage.passwordInputWebElement.fill(userDTO.password);
         await poManager.loginPage.submitButtonWebElement.click();
@@ -51,5 +52,13 @@ test.describe('Create Contact List Tests', async () => {
         }
       }
   });
+
+  /**
+   * Lots of additional tests can be added here:
+   * - check all fields have been saved with correct values
+   * - adding the same contact (if allowed or not)
+   * - logout from API (or another tab) and try to create a new form
+   * etc
+   */
 
 });

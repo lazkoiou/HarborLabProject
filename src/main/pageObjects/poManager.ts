@@ -5,7 +5,7 @@ import { ContactListPage } from "./contactListApp/contactListPage";
 import { AddContactFormPage } from "./contactListApp/addContactFormPage";
 
 /**
- * Class used to handle POMs
+ * Initializes and lazy-loads the POMs
  */
 export class POManager {
 

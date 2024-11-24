@@ -17,14 +17,13 @@ export class UsersService {
      * @param userDTO : dto containing the user's data
      * @returns : the token of the created user
      */
-    async createUser(userDTO: UserDTO): Promise<string> {
+    async createUser(userDTO: UserDTO): Promise<any> {
         const response = await this.usersClient.postAddUser(userDTO);
         if (!response.ok()) {
             throw new Error(`Failed to create user with status: ${response.status}`);
         }
         console.log('User created: ' + userDTO.email);
-        const responseData = await response.json();
-        return responseData.token;
+        return await response.json();
     }
 
     /**

@@ -1,6 +1,9 @@
 import { Locator, Page } from "@playwright/test";
 import { BasePage } from "../basePage";
 
+/**
+ * POM for the Add Contact Form page where a user can create a new contact
+ */
 export class AddContactFormPage extends BasePage {
 
     constructor(page: Page) {

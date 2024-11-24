@@ -1,5 +1,8 @@
 import { Page } from "@playwright/test";
 
+/**
+ * Base page POM which contains functionality which can be reusable among pages.
+ */
 export class BasePage {
 
     readonly page: Page;

@@ -1,7 +1,9 @@
 import { APIRequestContext } from "@playwright/test";
 import { UserDTO } from "../dtos/userDTO";
 
-
+/**
+ * Contains the requests for the users endpoint
+ */
 export class UsersClient {
     
     private request: APIRequestContext;

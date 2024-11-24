@@ -1,6 +1,6 @@
 
 /**
- * DTO with the fields for Add Contact form
+ * DTO with the fields for Add Contact form page
  */
 export class ContactFormDTO {
 

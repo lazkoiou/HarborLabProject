@@ -76,7 +76,7 @@ test.describe('Add User Web Page Tests', async () => {
     await usersService.deleteUser(bearerToken, userDTO);
   });
 
-  // Additional notes:
+  // Additional tests:
   // Input validation tests for all fields could be included - Not supported by the UI tested
   //  - e.g. email input without '@'
   //  - non latin characters

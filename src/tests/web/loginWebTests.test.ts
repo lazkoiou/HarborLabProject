@@ -53,7 +53,7 @@ test.describe('Login Page Web Tests', async () => {
     await expect(poManager.addUserPage.headerTitleWebElement).toHaveText('Add User');
   });
 
-  // Additional notes:
+  // Additional tests:
   // Username and password validation tests could be included - Not supported by the UI tested
   //  - e.g. input without '@'
   //  - non latin characters
@@ -66,7 +66,8 @@ test.describe('Login Page Web Tests', async () => {
     const usersService = new UsersService(clientManager.usersClient);
     const userDTO = UserDTO.getRandomDefaultUser();
     try { // Preparation: Create user through the API for faster execution
-      bearerToken = await usersService.createUser(userDTO);
+      const responseData = await usersService.createUser(userDTO);
+      bearerToken = responseData.token;
       // Actual test starts here
       await poManager.loginPage.usernameInputWebElement.fill(userDTO.firstName);
       await poManager.loginPage.passwordInputWebElement.fill(userDTO.lastName);
