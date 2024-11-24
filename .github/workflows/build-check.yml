@@ -21,7 +21,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: '21'
 
       # Step 3: Cache node_modules
       - name: Cache node_modules
@@ -40,6 +40,6 @@ jobs:
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
 
-      # Step 6: Build the TypeScript project
+      # Step 6: Run smoke tests
       - name: Build the project
-        run: npm run build
+        run: npm run test:web:smoke
