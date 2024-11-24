@@ -7,6 +7,17 @@ Playwright with TS: Used as requested for the implementation of the project.
 Github actions: For automated testing after each push, to ensure that the core smoke tests have not been broken.
 Jenkins: For CI/CD, scheduled runs of smoke and regression suites.
 
+# Brief explanation on the architecture #
+
+For API, I am using:
+- Clients to perform any HTTP requests
+- Services that contain business logic or interact with the client in a higher level
+- DTOs for more structured data
+
+For Web, I am using:
+- Page Object Model (POM)
+- API calls to speed up testing and perform actions not available via the UI
+
 # Test scenarios - API #
 
 Smoke tests:
