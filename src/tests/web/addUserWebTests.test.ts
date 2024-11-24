@@ -34,7 +34,7 @@ test.describe('Add User Web Page Tests', async () => {
     // Also, we can add an assertion about the displayed image.
   });
 
-  test('No input add user _expect_ validation error @smoke @web @addUser', async() => {
+  test('No input add user _expect_ validation error @web @regression @addUser', async() => {
     await poManager.addUserPage.submitButtonWebElement.click();
     await expect(poManager.addUserPage.validationErrorWebElement).toContainText('User validation failed');
     // Similar tests can be written here for exhaustive testing with @regression tag:
@@ -46,7 +46,7 @@ test.describe('Add User Web Page Tests', async () => {
     // case where I leave all of them empty.
   });
 
-  test('Sign up cancel _expect_ no created user @smoke @web @addUser', async() => {
+  test('Sign up cancel _expect_ no created user @web @regression @addUser', async() => {
     const userDTO = UserDTO.getRandomDefaultUser();
     // Fill form and click 'Cancel'
     await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
@@ -61,7 +61,7 @@ test.describe('Add User Web Page Tests', async () => {
     await expect(usersService.loginUser(userDTO.email, userDTO.password)).rejects.toThrow("Failed to login user with status: 401");
   });
 
-  test('Sign up user _expect_ create user @smoke @web @addUser', async() => {
+  test('Sign up user _expect_ create user @web @smoke @addUser', async() => {
     const userDTO = UserDTO.getRandomDefaultUser();
     await poManager.addUserPage.firstNameInputWebElement.fill(userDTO.firstName);
     await poManager.addUserPage.lastNameInputWebElement.fill(userDTO.lastName);

@@ -39,11 +39,12 @@ test.describe('Create Contact List Tests', async () => {
         await poManager.loginPage.submitButtonWebElement.click();
         await poManager.contactListPage.addNewContactButtonWebElement.click();
         // Actual test starts here
+        await poManager.contactListPage.waitForNumberOfSeconds(1); // added because test was flaky at this point
         await poManager.addContactFormPage.firstNameInputWebElement.fill(ContactFormDTO.getDefaultContactForm().firstName);
         await poManager.addContactFormPage.lastNameInputWebElement.fill(ContactFormDTO.getDefaultContactForm().lastName);
         await poManager.addContactFormPage.submitButtonWebElement.click();
         const name = ContactFormDTO.getDefaultContactForm().firstName + ' ' + ContactFormDTO.getDefaultContactForm().lastName;
-        (await poManager.contactListPage.getRowByNameWebElement(name)).waitFor();
+        await poManager.contactListPage.getRowByNameWebElement(name).waitFor();
         await expect((await poManager.contactListPage.getRowByNameWebElement(name)).first()).toBeVisible();
     }
     finally { // Cleanup: Delete previously created user

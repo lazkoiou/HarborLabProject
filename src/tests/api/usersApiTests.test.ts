@@ -13,7 +13,7 @@ test.describe(('Users Api tests'), () => {
         clientManager = new ClientManager(requestContext);
     });
 
-    test('POST add user with correct fields should create the user @api @smoke @users', async() => {
+    test('POST add user with correct fields _expect_ user created @api @smoke @users', async() => {
         let bearerToken: string | null = null;
         const userDTO = UserDTO.getRandomDefaultUser();
         const usersService = new UsersService(clientManager.usersClient);
@@ -38,7 +38,7 @@ test.describe(('Users Api tests'), () => {
         }
     });
 
-    test('POST add user with empty firstName should have response 400 Bad Request @api @regression @users', async() => {
+    test('POST add user with empty firstName _expect_ 400 Bad Request @api @regression @users', async() => {
         const userDTO = UserDTO.getRandomDefaultUser();
         userDTO.firstName = "";
         const response = await clientManager.usersClient.postAddUser(userDTO);
@@ -51,7 +51,7 @@ test.describe(('Users Api tests'), () => {
     //  - password = ""
     // Also, any other validations can be tested like this e.g. not allowed Greek characters
 
-    test('GET user profile should return the created user if existing @api @smoke @users', async() => {
+    test('GET user profile _expect_ return existing user @api @smoke @users', async() => {
         let bearerToken: string | null = null;
         try { // Create user
             const userDTO = UserDTO.getRandomDefaultUser();
@@ -86,7 +86,7 @@ test.describe(('Users Api tests'), () => {
         }
     }); 
 
-    test('GET user profile with no bearer token should return 401 Unauthorized @api @regression @users', async() => {
+    test('GET user profile with no bearer token _expect_ 401 Unauthorized @api @regression @users', async() => {
         const response = await clientManager.usersClient.getUserProfile('');
         expect(response.ok()).toBeFalsy();
         expect(response.status()).toBe(401);

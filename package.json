@@ -7,7 +7,7 @@
     "test:api:smoke": "npx playwright test --grep=\"@api.*@smoke\" --project=api",
     "test:api:regression": "npx playwright test --grep=\"@api.*@regression\" --project=api",
     "test:web:smoke": "npx playwright test --grep=\"@web.*@smoke\" --project=chromium",
-    "test:web:regression": "npx playwright test --grep=\"@api.*@regression\" --project=chromium"
+    "test:web:regression": "npx playwright test --grep=\"@web.*@regression\" --project=chromium"
   },
   "keywords": [],
   "author": "",
