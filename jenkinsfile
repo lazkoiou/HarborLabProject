@@ -1,0 +1,40 @@
+pipeline {
+    tools {
+        nodejs 'nodejs21'  // Name of the Node.js tool in Jenkins
+    }
+    stages {
+        stage('Check Node.js version') {
+            steps {
+                script {
+                    def nodeExists = bat(script: 'where node', returnStatus: true) == 0
+                    if (nodeExists) {
+                        bat 'node -v'
+                    }
+                    else {
+                        echo 'Node.js is not installed.'
+                    }
+                }
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+                script {
+                    bat '''
+                    echo "Installing project dependencies..."
+                    npm install -D @playwright/test allure-playwright allure-commandline
+                    npx playwright install
+                    '''
+                }
+            }
+        }
+        stage('Run tests') {
+            steps {
+                script {
+                    catchError(buildResult: 'UNSTABLE', stageResult: 'FAILURE') {
+                        bat 'npm run test:web:smoke'
+                    }
+                }
+            }
+        }
+    }
+}
