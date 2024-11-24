@@ -1,4 +1,5 @@
 pipeline {
+    agent any
     tools {
         nodejs 'nodejs21'  // Name of the Node.js tool in Jenkins
     }
