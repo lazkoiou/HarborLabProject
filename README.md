@@ -61,7 +61,7 @@ npm run test:web:regression
 
 # Areas of improvement you have identified #
 
-###Improvements that could take place:
+### Improvements that could take place:
 - Adding another report tool (e.g. allure-reports)
 - Attaching the report to the Jenkins job
 - Adding more smoke and regression tests (both for api and web)
