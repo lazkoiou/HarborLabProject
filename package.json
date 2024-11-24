@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:api": "npx playwright test --grep=@api --project=api",
-    "test:web": "npx playwright test --grep=@web --project=chromium"
+    "test:api:smoke": "npx playwright test --grep=\"@api.*@smoke\" --project=api",
+    "test:api:regression": "npx playwright test --grep=\"@api.*@regression\" --project=api",
+    "test:web:smoke": "npx playwright test --grep=\"@web.*@smoke\" --project=chromium",
+    "test:web:regression": "npx playwright test --grep=\"@api.*@regression\" --project=chromium"
   },
   "keywords": [],
   "author": "",
