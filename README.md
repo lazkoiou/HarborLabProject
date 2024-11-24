@@ -68,3 +68,5 @@ Improvements that could take place:
     4. Add a different logger instead of console.log()
     5. Implement handlers that keep track of created users and deletes them at the end of
         the tests, instead of using try-catch
+    6. Further separation of tests to @critical, which would run at the GitHub actions, because
+        running all the smoke tests, will be very time consuming after a point.
