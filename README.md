@@ -4,8 +4,8 @@
 # Frameworks and Tools #
 
 Playwright with TS: Used as requested for the implementation of the project.
-Github actions: For automated testing after each push, to ensure that the core smoke tests have not been broken.
-Jenkins: For CI/CD, scheduled runs of smoke and regression suites.
+Github actions: Added .github\workflows\build-check.yml for automated testing after each push, to ensure that the core smoke tests have not been broken.
+Jenkins: Added a jenkinsfile For CI/CD, scheduled runs of smoke and regression suites.
 
 # Brief explanation on the architecture #
 
